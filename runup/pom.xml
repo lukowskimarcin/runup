@@ -4,7 +4,7 @@
 	<groupId>com.runup</groupId>
 	<artifactId>runup</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
+	<packaging>war</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +26,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
@@ -34,21 +45,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- Tylko wbudowany Tomcat 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
-		</dependency>
- 		-->
- 		
+
+		<!-- Tylko wbudowany Tomcat <dependency> <groupId>org.springframework.boot</groupId> 
+			<artifactId>spring-boot-devtools</artifactId> <optional>true</optional> </dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -58,20 +65,10 @@
 
 	<build>
 		<finalName>runup</finalName>
-	
 		<plugins>
-
-			<!-- Tylko dla wbudowanego Tomcat'a 
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<addResources>true</addResources>
-				</configuration>
-			</plugin>
-			 -->
-			 
-			 
+			<!-- Tylko dla wbudowanego Tomcat'a <plugin> <groupId>org.springframework.boot</groupId> 
+				<artifactId>spring-boot-maven-plugin</artifactId> <configuration> <addResources>true</addResources> 
+				</configuration> </plugin> -->
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
@@ -79,21 +76,47 @@
 				<configuration>
 					<dockerHost>http://127.0.0.1:2375</dockerHost>
 					<verbose>true</verbose>
+					<useColor>true</useColor>
 					<images>
+
 						<image>
-							<name>runup</name>
+							<name>runup-docker</name>
 							<build>
 								<dockerFile>Dockerfile</dockerFile>
+								<cleanup>true</cleanup>
+								<tags>
+									<tag>latest</tag>
+								</tags>
+								<ports>
+									<port>8080</port>
+								</ports>
 								<assembly>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
+								<ports>
+									<port>8080:8080</port>
+								</ports>
 							</build>
+							<run>
+								<ports>
+									<port>8080:8080</port>
+								</ports>
+							</run>
 						</image>
 					</images>
 				</configuration>
+				<executions>
+					<execution>
+						<id>docker-build</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 
-	<packaging>war</packaging>
+
 </project>
