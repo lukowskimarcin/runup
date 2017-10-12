@@ -81,15 +81,20 @@
 
 						<image>
 							<name>runup-docker</name>
+							<alias>wildfly</alias>
+							
+							<external>
+								<type>compose</type>
+								<basedir>src/main/docker</basedir>
+								<composeFile>docker-compose.yml</composeFile>
+							</external>
+
 							<build>
 								<dockerFile>Dockerfile</dockerFile>
 								<cleanup>true</cleanup>
 								<tags>
 									<tag>latest</tag>
 								</tags>
-								<ports>
-									<port>8080</port>
-								</ports>
 								<assembly>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>

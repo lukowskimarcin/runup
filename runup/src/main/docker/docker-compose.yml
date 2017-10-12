@@ -1,0 +1,11 @@
+version: "2"
+services:
+  wildfly:
+     ports:
+      - "8080:8080"  
+  rserver:
+    image: rocker/rstudio
+    ports:
+      - "8787:8787"  
+    volumes_from:
+      - wildfly      
