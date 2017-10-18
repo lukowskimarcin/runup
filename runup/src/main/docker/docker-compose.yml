@@ -1,11 +1,28 @@
 version: "2"
 services:
   wildfly:
-     ports:
-      - "8080:8080"  
-  rserver:
-    image: rocker/rstudio
     ports:
-      - "8787:8787"  
-    volumes_from:
-      - wildfly      
+      - "8080:8080"   
+    links:
+      - db
+      - rserver
+          
+  rserver:
+    image: stevenpollack/btug
+    ports:
+      - "6311:6311"
+                  
+  db:
+    image: postgres:9.5  
+    volumes:
+      - sample_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_USER=sample
+      - POSTGRES_DB=sample
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+   
+volumes:
+    sample_db: {}
